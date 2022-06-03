@@ -25,7 +25,7 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: const Color(0xFF2D2D33),
+        backgroundColor: Colors.black54,
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.only(left: 20, right: 20),
@@ -46,7 +46,7 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
                         return ElevatedButton(
                           onPressed: () {
                             if (Calculations.operations.contains(buttonText)) {
-                              if(calContent == "") return;
+                              if (calContent == "") return;
                               setState(() {
                                 operations.add(buttonText);
                                 calContent += " $buttonText ";
@@ -54,7 +54,7 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
                               return;
                             }
 
-                            if(buttonText == Calculations.clear){
+                            if (buttonText == Calculations.clear) {
                               setState(() {
                                 operations.add(Calculations.clear);
                                 calContent = "";
@@ -63,11 +63,12 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
                               return;
                             }
 
-                            if(buttonText == Calculations.equal){
-                              String newCalContent = Calculator.parseString(calContent);
+                            if (buttonText == Calculations.equal) {
+                              String newCalContent =
+                                  Calculator.parseString(calContent);
 
-                              setState((){
-                                if( newCalContent != calContent){
+                              setState(() {
+                                if (newCalContent != calContent) {
                                   calculations.add(calContent);
                                 }
                                 operations.add(Calculations.equal);
@@ -77,23 +78,25 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
                               return;
                             }
 
-                            if(buttonText == Calculations.period){
-                              return setState((){
+                            if (buttonText == Calculations.period) {
+                              return setState(() {
                                 calContent = Calculator.addPeriod(calContent);
                               });
                             }
 
-                            setState((){
-                              if(!isEquation && operations.isNotEmpty && operations.last == Calculations.equal){
+                            setState(() {
+                              if (!isEquation &&
+                                  operations.isNotEmpty &&
+                                  operations.last == Calculations.equal) {
                                 answer = buttonText;
                                 isEquation = true;
-                              }else{
+                              } else {
                                 calContent += buttonText;
                               }
                             });
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.red[400],
+                            primary: Colors.grey[400],
                             maximumSize: const Size(80, 80),
                           ),
                           child: Text(
@@ -103,7 +106,7 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
                           ),
                         );
                       }),
-                )
+                ),
               ],
             ),
           ),

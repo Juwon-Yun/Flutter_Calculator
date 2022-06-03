@@ -78,13 +78,11 @@ class Calculator {
   }
 
   static bool includesOperation(String calculator) {
-    // TODO Refactoring
     for (var operation in Calculations.operations) {
       if (calculator.contains(operation)) {
         return true;
       }
     }
-
     return false;
   }
 }
