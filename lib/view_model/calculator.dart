@@ -13,6 +13,7 @@ class Calculations {
     Calculations.divide,
     Calculations.subtract,
     Calculations.divide,
+    Calculations.multiple,
   ];
 
   static const calculatorButtonRows = [

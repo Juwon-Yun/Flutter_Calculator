@@ -14,7 +14,11 @@ class CalculatorWidget extends StatefulWidget {
 }
 
 class _CalculatorWidgetState extends State<CalculatorWidget> {
-  String calContent = '123';
+  bool isEquation = true;
+  String calContent = '';
+  String answer = '';
+  List<String> operations = [];
+  List<String> calculations = [];
 
   @override
   Widget build(BuildContext context) {
@@ -28,37 +32,8 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _Header(),
-                Expanded(
-                  flex: 3,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Flexible(
-                        child: Text(
-                          calContent,
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 20),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                // Row(
-                //   children: Calculations.calculatorButtonRows
-                //       .map(
-                //           (str) => ElevatedButton(
-                //             onPressed: () {},
-                //             child: Text(str),
-                //             style: ElevatedButton.styleFrom(
-                //                 primary: Colors.red[200],
-                //                 maximumSize: Size(80, 40),
-                //             ),
-                //           ))
-                //       .toList(),
-                // ),
+                const _Header(),
+                _Body(calContent: calContent, answer: answer),
                 Expanded(
                   child: GridView.builder(
                       itemCount: Calculations.calculatorButtonRows.length,
@@ -66,13 +41,56 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
                           const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 6),
                       itemBuilder: (BuildContext context, index) {
+                        String buttonText =
+                            Calculations.calculatorButtonRows[index];
                         return ElevatedButton(
                           onPressed: () {
-                            if(Calculations.calculatorButtonRows[index] == '1'){
+                            if (Calculations.operations.contains(buttonText)) {
+                              if(calContent == "") return;
+                              setState(() {
+                                operations.add(buttonText);
+                                calContent += " $buttonText ";
+                              });
+                              return;
+                            }
+
+                            if(buttonText == Calculations.clear){
+                              setState(() {
+                                operations.add(Calculations.clear);
+                                calContent = "";
+                                answer = "";
+                              });
+                              return;
+                            }
+
+                            if(buttonText == Calculations.equal){
+                              String newCalContent = Calculator.parseString(calContent);
+
                               setState((){
-                                calContent += '1';
+                                if( newCalContent != calContent){
+                                  calculations.add(calContent);
+                                }
+                                operations.add(Calculations.equal);
+                                answer = newCalContent;
+                                isEquation = false;
+                              });
+                              return;
+                            }
+
+                            if(buttonText == Calculations.period){
+                              return setState((){
+                                calContent = Calculator.addPeriod(calContent);
                               });
                             }
+
+                            setState((){
+                              if(!isEquation && operations.isNotEmpty && operations.last == Calculations.equal){
+                                answer = buttonText;
+                                isEquation = true;
+                              }else{
+                                calContent += buttonText;
+                              }
+                            });
                           },
                           style: ElevatedButton.styleFrom(
                             primary: Colors.red[400],
@@ -95,6 +113,50 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
   }
 }
 
+class _Body extends StatelessWidget {
+  const _Body({
+    Key? key,
+    required this.calContent,
+    required this.answer,
+  }) : super(key: key);
+
+  final String calContent;
+  final String answer;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      flex: 3,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Flexible(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  calContent,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 20),
+                ),
+                Text(
+                  answer,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 60),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
 class _Header extends StatelessWidget {
   const _Header({
     Key? key,
@@ -108,9 +170,7 @@ class _Header extends StatelessWidget {
         const Text(
           '계산기',
           style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w700,
-              fontSize: 30.0),
+              color: Colors.white, fontWeight: FontWeight.w700, fontSize: 30.0),
         ),
         IconButton(
             onPressed: () {},
