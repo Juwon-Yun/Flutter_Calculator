@@ -15,6 +15,15 @@ class Calculations {
     Calculations.divide,
   ];
 
+  static const calculatorButtonRows = [
+    '7', '8', '9', Calculations.divide,
+    '4', '5', '6', Calculations.multiple,
+    '1', '2', '3', Calculations.subtract,
+    Calculations.period, '0', '00', Calculations.add,
+    Calculations.clear, Calculations.equal
+  ];
+
+
   static double plus(double a, double b) => a + b;
   static double minus(double a, double b) => a - b;
   static double divideAtoB(double a, double b) => a / b;

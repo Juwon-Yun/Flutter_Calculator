@@ -1,112 +1,125 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_calculator/view_model/calculator.dart';
-import 'package:flutter_calculator/view/number_display.dart';
 
-void main() => runApp(const CalC());
+void main() {
+  runApp(CalculatorWidget());
+}
 
-class CalC extends StatelessWidget {
-  const CalC({Key? key}) : super(key: key);
+class CalculatorWidget extends StatefulWidget {
+  const CalculatorWidget({Key? key}) : super(key: key);
+
+  @override
+  State<CalculatorWidget> createState() => _CalculatorWidgetState();
+}
+
+class _CalculatorWidgetState extends State<CalculatorWidget> {
+  String calContent = '123';
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Calculator App',
       debugShowCheckedModeBanner: false,
-      home: MainPage(title: 'Calculator'),
+      home: Scaffold(
+        backgroundColor: const Color(0xFF2D2D33),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20, right: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _Header(),
+                Expanded(
+                  flex: 3,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          calContent,
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 20),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                // Row(
+                //   children: Calculations.calculatorButtonRows
+                //       .map(
+                //           (str) => ElevatedButton(
+                //             onPressed: () {},
+                //             child: Text(str),
+                //             style: ElevatedButton.styleFrom(
+                //                 primary: Colors.red[200],
+                //                 maximumSize: Size(80, 40),
+                //             ),
+                //           ))
+                //       .toList(),
+                // ),
+                Expanded(
+                  child: GridView.builder(
+                      itemCount: Calculations.calculatorButtonRows.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 6),
+                      itemBuilder: (BuildContext context, index) {
+                        return ElevatedButton(
+                          onPressed: () {
+                            if(Calculations.calculatorButtonRows[index] == '1'){
+                              setState((){
+                                calContent += '1';
+                              });
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.red[400],
+                            maximumSize: const Size(80, 80),
+                          ),
+                          child: Text(
+                            Calculations.calculatorButtonRows[index],
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w700, fontSize: 20),
+                          ),
+                        );
+                      }),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
 
-class MainPage extends StatefulWidget {
-  final String title;
-  const MainPage({Key? key, required this.title}) : super(key: key);
-
-  @override
-  State<MainPage> createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
-  bool isNewEquation = true;
-  List<double> values = [];
-  List<String> operations = [];
-  List<String> calculations = [];
-  String calculationContent = '';
+class _Header extends StatelessWidget {
+  const _Header({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        centerTitle: false,
-        actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.history)),
-        ],
-      ),
-      body: Column(
-        children: [
-          NumberDisplay(value: calculationContent),
-        ],
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const Text(
+          '계산기',
+          style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+              fontSize: 30.0),
+        ),
+        IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.history,
+              color: Colors.white,
+              size: 35,
+            ))
+      ],
     );
-  }
-
-  // _navigateToHistory(BuildContext context) async {
-  //   final res = await Navigator.push(
-  //       context,
-  //       MaterialPageRoute(
-  //           builder: (context) => History(operations: calculations)));
-  //
-  //   if (res != null) {
-  //     setState(() {
-  //       isNewEquation = false;
-  //       calculationContent = Calculator.parseString(res);
-  //     });
-  //   }
-  // }
-
-  void _onPressed({required String buttonText}) {
-    if (Calculations.operations.contains(buttonText)) {
-      return setState(() {
-        operations.add(buttonText);
-        calculationContent = " $buttonText ";
-      });
-    }
-
-    if (buttonText == Calculations.clear) {
-      return setState(() {
-        operations.add(Calculations.clear);
-        calculationContent = "";
-      });
-    }
-
-    if (buttonText == Calculations.equal) {
-      String newContent = Calculator.parseString(calculationContent);
-
-      return setState(() {
-        if (newContent != calculationContent) {
-          calculations.add(calculationContent);
-        }
-        operations.add(Calculations.equal);
-        calculationContent = newContent;
-        isNewEquation = false;
-      });
-    }
-
-    if(buttonText == Calculations.period){
-      return setState((){
-        calculationContent = Calculator.addPeriod(calculationContent);
-      });
-    }
-
-    setState((){
-      // TODO Refactoring
-      if(!isNewEquation && operations.length > 0 && operations.last == Calculations.equal){
-        calculationContent = buttonText;
-        isNewEquation = true;
-      } else {
-        calculationContent += buttonText;
-      }
-    });
-
   }
 }
