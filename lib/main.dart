@@ -1,9 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_calculator/view_model/calculator.dart';
+import 'package:flutter_calculator/view_model/calculator_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(CalculatorWidget());
+  runApp(App());
+}
+
+class App extends StatelessWidget {
+  const App({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: ChangeNotifierProvider(
+        create: (_) => CalculatorProvider(),
+        child: CalculatorWidget(),
+      ),
+    );
+  }
 }
 
 class CalculatorWidget extends StatefulWidget {
@@ -20,95 +37,96 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
   List<String> operations = [];
   List<String> calculations = [];
 
+  late CalculatorProvider _calculatorProvider;
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.black54,
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                const _Header(),
-                _Body(calContent: calContent, answer: answer),
-                Expanded(
-                  child: GridView.builder(
-                      itemCount: Calculations.calculatorButtonRows.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 6),
-                      itemBuilder: (BuildContext context, index) {
-                        String buttonText =
-                            Calculations.calculatorButtonRows[index];
-                        return ElevatedButton(
-                          onPressed: () {
-                            if (Calculations.operations.contains(buttonText)) {
-                              if (calContent == "") return;
-                              setState(() {
-                                operations.add(buttonText);
-                                calContent += " $buttonText ";
-                              });
-                              return;
-                            }
+    _calculatorProvider =
+        Provider.of<CalculatorProvider>(context, listen: false);
+    return Scaffold(
+      backgroundColor: Colors.black54,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              const _Header(),
+              _Body(calContent: calContent, answer: answer),
+              Expanded(
+                child: GridView.builder(
+                    itemCount: Calculations.calculatorButtonRows.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 6),
+                    itemBuilder: (BuildContext context, index) {
+                      String buttonText =
+                          Calculations.calculatorButtonRows[index];
+                      return ElevatedButton(
+                        onPressed: () {
+                          if (Calculations.operations.contains(buttonText)) {
+                            if (calContent == "") return;
+                            setState(() {
+                              operations.add(buttonText);
+                              calContent += " $buttonText ";
+                            });
+                            return;
+                          }
 
-                            if (buttonText == Calculations.clear) {
-                              setState(() {
-                                operations.add(Calculations.clear);
-                                calContent = "";
-                                answer = "";
-                              });
-                              return;
-                            }
+                          if (buttonText == Calculations.clear) {
+                            setState(() {
+                              operations.add(Calculations.clear);
+                              calContent = "";
+                              answer = "";
+                            });
+                            return;
+                          }
 
-                            if (buttonText == Calculations.equal) {
-                              String newCalContent =
-                                  Calculator.parseString(calContent);
-
-                              setState(() {
-                                if (newCalContent != calContent) {
-                                  calculations.add(calContent);
-                                }
-                                operations.add(Calculations.equal);
-                                answer = newCalContent;
-                                isEquation = false;
-                              });
-                              return;
-                            }
-
-                            if (buttonText == Calculations.period) {
-                              return setState(() {
-                                calContent = Calculator.addPeriod(calContent);
-                              });
-                            }
+                          if (buttonText == Calculations.equal) {
+                            String newCalContent =
+                                Calculator.parseString(calContent);
 
                             setState(() {
-                              if (!isEquation &&
-                                  operations.isNotEmpty &&
-                                  operations.last == Calculations.equal) {
-                                answer = buttonText;
-                                isEquation = true;
-                              } else {
-                                calContent += buttonText;
+                              if (newCalContent != calContent) {
+                                calculations.add(calContent);
                               }
+                              operations.add(Calculations.equal);
+                              answer = newCalContent;
+                              isEquation = false;
                             });
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.grey[400],
-                            maximumSize: const Size(80, 80),
-                          ),
-                          child: Text(
-                            Calculations.calculatorButtonRows[index],
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w700, fontSize: 20),
-                          ),
-                        );
-                      }),
-                ),
-              ],
-            ),
+                            return;
+                          }
+
+                          if (buttonText == Calculations.period) {
+                            return setState(() {
+                              calContent = Calculator.addPeriod(calContent);
+                            });
+                          }
+
+                          setState(() {
+                            if (!isEquation &&
+                                operations.isNotEmpty &&
+                                operations.last == Calculations.equal) {
+                              answer = buttonText;
+                              isEquation = true;
+                            } else {
+                              calContent += buttonText;
+                            }
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.grey[400],
+                          maximumSize: const Size(80, 80),
+                        ),
+                        child: Text(
+                          Calculations.calculatorButtonRows[index],
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w700, fontSize: 20),
+                        ),
+                      );
+                    }),
+              ),
+            ],
           ),
         ),
       ),

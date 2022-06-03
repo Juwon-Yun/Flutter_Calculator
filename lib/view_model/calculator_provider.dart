@@ -15,40 +15,48 @@ class CalculatorProvider extends ChangeNotifier {
 
   void setIsEquation() {
     _isEquation = true;
+    notifyListeners();
   }
 
   void setIsNotEquation() {
     _isEquation = false;
+    notifyListeners();
   }
 
   void addOperations(String text) {
     _operations.add(text);
+    notifyListeners();
   }
 
   void addCalculations(String text) {
     _calculations.add(text);
+    notifyListeners();
   }
 
   void attachCalContent(String text) {
     _calContent += text;
+    notifyListeners();
   }
 
   void initCalContent() {
     _calContent = '';
+    notifyListeners();
   }
 
   void substituteAnswer(String text) {
     _answer = text;
+    notifyListeners();
   }
 
   void initAnswer() {
     _answer = '';
+    notifyListeners();
   }
 
-  bool isEmpty(String text) {
-    if (text == "") {
-      return true;
-    }
-    return false;
-  }
+  // bool isEmpty(String text) {
+  //   if (text == "") {
+  //     return true;
+  //   }
+  //   return false;
+  // }
 }
