@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_calculator/calculator/calculator.dart';
+import 'package:flutter_calculator/view_model/calculator.dart';
+import 'package:flutter_calculator/view/number_display.dart';
 
-void main() => runApp(CalC());
+void main() => runApp(const CalC());
 
 class CalC extends StatelessWidget {
   const CalC({Key? key}) : super(key: key);
@@ -45,25 +44,25 @@ class _MainPageState extends State<MainPage> {
       ),
       body: Column(
         children: [
-          // NumberDisplay(value: calculationContent),
+          NumberDisplay(value: calculationContent),
         ],
       ),
     );
   }
 
-  _navigateToHistory(BuildContext context) async {
-    final res = await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => History(operations: calculations)));
-
-    if (res != null) {
-      setState(() {
-        isNewEquation = false;
-        calculationContent = Calculator.parseString(res);
-      });
-    }
-  }
+  // _navigateToHistory(BuildContext context) async {
+  //   final res = await Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //           builder: (context) => History(operations: calculations)));
+  //
+  //   if (res != null) {
+  //     setState(() {
+  //       isNewEquation = false;
+  //       calculationContent = Calculator.parseString(res);
+  //     });
+  //   }
+  // }
 
   void _onPressed({required String buttonText}) {
     if (Calculations.operations.contains(buttonText)) {

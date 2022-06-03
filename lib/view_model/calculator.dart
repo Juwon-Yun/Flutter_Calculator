@@ -1,4 +1,4 @@
-import 'package:flutter_calculator/number/number_formatter.dart';
+import 'package:flutter_calculator/view_model/number_formatter.dart';
 
 class Calculations {
   static const period = '.';
