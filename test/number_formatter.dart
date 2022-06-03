@@ -1,4 +1,4 @@
-import 'package:flutter_calculator/number_formatter/number_formatter.dart';
+import 'package:flutter_calculator/number/number_formatter.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main(){

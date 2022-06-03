@@ -1,4 +1,4 @@
-import 'package:flutter_calculator/number_formatter/number_formatter.dart';
+import 'package:flutter_calculator/number/number_formatter.dart';
 
 class Calculations {
   static const period = '.';
@@ -68,6 +68,7 @@ class Calculator {
   }
 
   static bool includesOperation(String calculator) {
+    // TODO Refactoring
     for (var operation in Calculations.operations) {
       if (calculator.contains(operation)) {
         return true;
