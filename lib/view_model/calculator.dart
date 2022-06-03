@@ -6,14 +6,15 @@ class Calculations {
   static const subtract = '-';
   static const add = '+';
   static const divide = '/';
-  static const clear = 'clear';
   static const equal = '=';
+  static const clear = 'clear';
   static const operations = [
     Calculations.add,
     Calculations.divide,
     Calculations.subtract,
     Calculations.divide,
     Calculations.multiple,
+    Calculations.equal,
   ];
 
   static const calculatorButtonRows = [

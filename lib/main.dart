@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_calculator/view/number_row_image.dart';
 import 'package:flutter_calculator/view_model/calculator.dart';
 
 void main() {
@@ -134,20 +135,22 @@ class _Body extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text(
-                  calContent,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 20),
-                ),
-                Text(
-                  answer,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 60),
-                ),
+                // Text(
+                //   calContent,
+                //   style: const TextStyle(
+                //       color: Colors.white,
+                //       fontWeight: FontWeight.w400,
+                //       fontSize: 20),
+                // ),
+                NumberRowImage(text: calContent),
+                NumberRowImage(text: answer)
+                // Text(
+                //   answer,
+                //   style: const TextStyle(
+                //       color: Colors.white,
+                //       fontWeight: FontWeight.w700,
+                //       fontSize: 60),
+                // ),
               ],
             ),
           )
