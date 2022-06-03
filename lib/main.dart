@@ -23,19 +23,8 @@ class App extends StatelessWidget {
   }
 }
 
-class CalculatorWidget extends StatefulWidget {
-  const CalculatorWidget({Key? key}) : super(key: key);
-
-  @override
-  State<CalculatorWidget> createState() => _CalculatorWidgetState();
-}
-
-class _CalculatorWidgetState extends State<CalculatorWidget> {
-  bool isEquation = true;
-  String calContent = '';
-  String answer = '';
-  List<String> operations = [];
-  List<String> calculations = [];
+class CalculatorWidget extends StatelessWidget {
+  CalculatorWidget({Key? key}) : super(key: key);
 
   late CalculatorProvider _calculatorProvider;
 
@@ -66,16 +55,16 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
                                 Calculations.calculatorButtonRows[index];
                             return ElevatedButton(
                               onPressed: () {
+                                // if (calContent == "") return;
+                                // setState(() {
+                                //   operations.add(buttonText);
+                                //   calContent += " $buttonText ";
+                                // });
                                 if (Calculations.operations
                                     .contains(buttonText)) {
-                                  // if (calContent == "") return;
-                                  if (Provider.of<CalculatorProvider>(context)
-                                          .calContent ==
-                                      "") return;
-                                  // setState(() {
-                                  //   operations.add(buttonText);
-                                  //   calContent += " $buttonText ";
-                                  // });
+                                  if (_calculatorProvider.calContent == "") {
+                                    return;
+                                  }
                                   Provider.of<CalculatorProvider>(context)
                                       .addOperations(buttonText);
                                   Provider.of<CalculatorProvider>(context)
