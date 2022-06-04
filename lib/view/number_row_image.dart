@@ -7,17 +7,18 @@ class NumberRowImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: text.split("").map((e) {
-        if(Calculations.operations.contains(e)){
-          return Text(e);
-        }
-        return Image.asset(
-          'asset/img/$e.png',
-          width: 50,
-          height: 70,
-        );
-      }).toList(),
+    return SingleChildScrollView(
+      child: Row(
+        children: text
+            .split("")
+            .map((e) => Image.asset(
+                  'asset/img/$e.png',
+                  width: 50,
+                  height: 70,
+                  fit: BoxFit.contain,
+                ))
+            .toList(),
+      ),
     );
   }
 }

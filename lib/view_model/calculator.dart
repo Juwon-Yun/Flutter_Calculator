@@ -5,7 +5,7 @@ class Calculations {
   static const multiple = '*';
   static const subtract = '-';
   static const add = '+';
-  static const divide = '/';
+  static const divide = 'd';
   static const equal = '=';
   static const clear = 'clear';
   static const operations = [

@@ -44,18 +44,10 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
                       itemBuilder: (BuildContext context, index) {
                         String buttonText =
                             Calculations.calculatorButtonRows[index];
+
                         return ElevatedButton(
                           onPressed: () {
-                            if (Calculations.operations.contains(buttonText)) {
-                              if(calContent == "") return;
-                              setState(() {
-                                operations.add(buttonText);
-                                calContent += " $buttonText ";
-                              });
-                              return;
-                            }
-
-                            if(buttonText == Calculations.clear){
+                            if (buttonText == Calculations.clear) {
                               setState(() {
                                 operations.add(Calculations.clear);
                                 calContent = "";
@@ -64,11 +56,12 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
                               return;
                             }
 
-                            if(buttonText == Calculations.equal){
-                              String newCalContent = Calculator.parseString(calContent);
+                            if (buttonText == Calculations.equal) {
+                              String newCalContent =
+                                  Calculator.parseString(calContent);
 
-                              setState((){
-                                if( newCalContent != calContent){
+                              setState(() {
+                                if (newCalContent != calContent) {
                                   calculations.add(calContent);
                                 }
                                 operations.add(Calculations.equal);
@@ -78,18 +71,32 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
                               return;
                             }
 
-                            if(buttonText == Calculations.period){
-                              return setState((){
+                            if (Calculations.operations.contains(buttonText)) {
+                              if (calContent == "") return;
+                              // if(buttonText == "=") return;
+                              setState(() {
+                                calContent += buttonText;
+                                operations.add(buttonText);
+                                // calContent += " $buttonText ";
+                              });
+                              return;
+                            }
+
+                            if (buttonText == Calculations.period) {
+                              return setState(() {
                                 calContent = Calculator.addPeriod(calContent);
                               });
                             }
 
-                            setState((){
-                              if(!isEquation && operations.isNotEmpty && operations.last == Calculations.equal){
+                            setState(() {
+                              if (!isEquation &&
+                                  operations.isNotEmpty &&
+                                  operations.last == Calculations.equal) {
                                 answer = buttonText;
                                 isEquation = true;
-                              }else{
+                              } else {
                                 calContent += buttonText;
+                                answer = "";
                               }
                             });
                           },
@@ -98,7 +105,9 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
                             maximumSize: const Size(80, 80),
                           ),
                           child: Text(
-                            Calculations.calculatorButtonRows[index],
+                            Calculations.calculatorButtonRows[index] == "d"
+                                ? "/"
+                                : Calculations.calculatorButtonRows[index],
                             style: const TextStyle(
                                 fontWeight: FontWeight.w700, fontSize: 20),
                           ),
@@ -175,13 +184,13 @@ class _Header extends StatelessWidget {
           style: TextStyle(
               color: Colors.white, fontWeight: FontWeight.w700, fontSize: 30.0),
         ),
-        IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.history,
-              color: Colors.white,
-              size: 35,
-            ))
+        // IconButton(
+        //     onPressed: () {},
+        //     icon: const Icon(
+        //       Icons.history,
+        //       color: Colors.white,
+        //       size: 35,
+        //     ))
       ],
     );
   }
